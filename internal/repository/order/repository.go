@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 
+	"github.com/2twin/L0/internal/database"
 	"github.com/2twin/L0/internal/model"
 	repoOrder "github.com/2twin/L0/internal/repository/order/model"
 	"github.com/jellydator/ttlcache/v3"
@@ -14,7 +15,7 @@ import (
 
 type repository struct {
 	cache *ttlcache.Cache[string, repoOrder.Order]
-	db    *sql.DB
+	db    *database.Queries
 }
 
 // type PostgresClient interface {
@@ -32,7 +33,7 @@ func NewRepository(dbURL string) (*repository, error) {
 
 	return &repository{
 		cache: ttlcache.New[string, repoOrder.Order](),
-		db:    db,
+		db:    database.New(db),
 	}, nil
 }
 
@@ -49,7 +50,8 @@ func (r *repository) Create(_ context.Context, orderUUID string, order *model.Or
 	panic("unimplemented!")
 }
 
-func (r *repository) Get(_ context.Context, orderUUID string) (*model.Order, error) {
+func (r *repository) Get(ctx context.Context, orderUUID string) (*model.Order, error) {
+	// order, err := r.db.GetOrder(ctx, orderUUID)
 	return &model.Order{
 		OrderUID: "abc",
 	}, nil
