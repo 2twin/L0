@@ -12,13 +12,15 @@ const (
 )
 
 type natsConfig struct {
-	ClusterID string
-	ClientID  string
-	Subject   string
+	clusterID string
+	clientID  string
+	subject   string
 }
 
 type NatsConfig interface {
-	Address() string
+	ClusterID() string
+	ClientID() string
+	Subject() string
 }
 
 func NewNatsConfig() (*natsConfig, error) {
@@ -38,12 +40,20 @@ func NewNatsConfig() (*natsConfig, error) {
 	}
 
 	return &natsConfig{
-		ClusterID: cluster,
-		ClientID:  client,
-		Subject:   subject,
+		clusterID: cluster,
+		clientID:  client,
+		subject:   subject,
 	}, nil
 }
 
-func (cfg *natsConfig) Address() string {
-	return "nats://nats-streming:4222"
+func (cfg *natsConfig) ClientID() string {
+	return cfg.clientID
+}
+
+func (cfg *natsConfig) ClusterID() string {
+	return cfg.clusterID
+}
+
+func (cfg *natsConfig) Subject() string {
+	return cfg.subject
 }

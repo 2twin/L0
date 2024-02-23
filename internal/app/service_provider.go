@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/2twin/L0/internal/config"
+	natsstreaming "github.com/2twin/L0/internal/nats-streaming"
 	"github.com/2twin/L0/internal/repository"
 	orderRepository "github.com/2twin/L0/internal/repository/order"
 	"github.com/2twin/L0/internal/service"
@@ -16,6 +17,7 @@ type serviceProvider struct {
 	httpConfig      config.HttpConfig
 	orderRepository repository.OrderRepository
 	orderService    service.OrderService
+	natsStreaming   natsstreaming.NatsStreaming
 }
 
 func newServiceProvider() *serviceProvider {
@@ -68,6 +70,14 @@ func (s *serviceProvider) OrderRepository() repository.OrderRepository {
 		s.orderRepository = rep
 	}
 	return s.orderRepository
+}
+
+func (s *serviceProvider) NatsStreaming() natsstreaming.NatsStreaming {
+	if s.natsStreaming == nil {
+		ns := natsstreaming.NewNatsStreaming(s.NatsConfig().ClusterID(), s.NatsConfig().ClientID(), s.NatsConfig().Subject())
+		s.natsStreaming = ns
+	}
+	return s.natsStreaming
 }
 
 func (s *serviceProvider) OrderService() service.OrderService {

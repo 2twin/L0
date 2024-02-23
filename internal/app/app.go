@@ -34,6 +34,7 @@ func (a *App) initDeps(ctx context.Context) error {
 	deps := []func(context.Context) error{
 		a.initConfig,
 		a.initServiceProvider,
+		a.connectNatsStreaming,
 		a.initHttpServer,
 	}
 
@@ -58,6 +59,15 @@ func (a *App) initConfig(_ context.Context) error {
 
 func (a *App) initServiceProvider(_ context.Context) error {
 	a.serviceProvider = newServiceProvider()
+	return nil
+}
+
+func (a *App) connectNatsStreaming(_ context.Context) error {
+	err := a.serviceProvider.NatsStreaming().Connect()
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
