@@ -1,6 +1,12 @@
 package natsstreaming
 
-import "github.com/nats-io/stan.go"
+import (
+	"context"
+
+	"github.com/2twin/L0/internal/model"
+	"github.com/2twin/L0/internal/repository"
+	"github.com/nats-io/stan.go"
+)
 
 type natsStreaming struct {
 	clusterID string
@@ -11,8 +17,8 @@ type natsStreaming struct {
 
 type NatsStreaming interface {
 	Connect() error
-	Publish() error
-	Subscribe() (stan.Subscription, error)
+	Publish(order *model.Order) error
+	Subscribe(ctx context.Context, repo repository.OrderRepository) (stan.Subscription, error)
 }
 
 func NewNatsStreaming(clusterID string, clientID string, subject string) *natsStreaming {

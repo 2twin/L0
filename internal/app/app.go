@@ -23,6 +23,8 @@ func NewApp(ctx context.Context) (*App, error) {
 		return nil, err
 	}
 
+	app.serviceProvider.natsStreaming.Subscribe(ctx, app.serviceProvider.orderRepository)
+
 	return app, nil
 }
 
