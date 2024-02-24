@@ -27,7 +27,7 @@ INSERT INTO orders (
     sm_id,
     date_created,
     oof_shard
-) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, 14) RETURNING order_uid, track_number, entry, delivery, payment, items, locale, internal_signature, customer_id, delivery_service, shardkey, sm_id, date_created, oof_shard
+) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) RETURNING order_uid, track_number, entry, delivery, payment, items, locale, internal_signature, customer_id, delivery_service, shardkey, sm_id, date_created, oof_shard
 `
 
 type CreateOrderParams struct {
@@ -44,6 +44,7 @@ type CreateOrderParams struct {
 	Shardkey          string
 	SmID              int32
 	DateCreated       time.Time
+	OofShard          string
 }
 
 func (q *Queries) CreateOrder(ctx context.Context, arg CreateOrderParams) (Order, error) {
@@ -61,6 +62,7 @@ func (q *Queries) CreateOrder(ctx context.Context, arg CreateOrderParams) (Order
 		arg.Shardkey,
 		arg.SmID,
 		arg.DateCreated,
+		arg.OofShard,
 	)
 	var i Order
 	err := row.Scan(

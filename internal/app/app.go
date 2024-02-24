@@ -97,7 +97,7 @@ func (a *App) handlerGetOrder(w http.ResponseWriter, r *http.Request) {
 	respondWithJSON(w, http.StatusOK, order)
 }
 
-func (a *App) initHttpServer(_ context.Context) error {
+func (a *App) initHttpServer(ctx context.Context) error {
 	router := a.newRouter()
 	router.Get("/order/{orderUUID}", a.handlerGetOrder)
 
