@@ -5,8 +5,10 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/2twin/L0/internal/config"
+	"github.com/2twin/L0/internal/model"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/cors"
 )
@@ -23,12 +25,19 @@ func NewApp(ctx context.Context) (*App, error) {
 		return nil, err
 	}
 
-	app.serviceProvider.natsStreaming.Subscribe(ctx, app.serviceProvider.orderRepository)
+	go func() {
+		for {
+			app.serviceProvider.natsStreaming.Publish(model.GenerageOrder())
+			time.Sleep(3 * time.Second)
+		}
+	}()
+
+	app.serviceProvider.natsStreaming.Subscribe(ctx, app.serviceProvider.OrderRepository())
 
 	return app, nil
 }
 
-func (a *App) Run() error {
+func (a *App) Run() error { 
 	return a.runHttpServer()
 }
 
