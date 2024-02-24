@@ -2,6 +2,7 @@ package natsstreaming
 
 import (
 	"context"
+	"log"
 
 	"github.com/2twin/L0/internal/model"
 	"github.com/2twin/L0/internal/repository"
@@ -13,6 +14,7 @@ type natsStreaming struct {
 	clientID  string
 	subject   string
 	sc        stan.Conn
+	addr      string
 }
 
 type NatsStreaming interface {
@@ -21,18 +23,20 @@ type NatsStreaming interface {
 	Subscribe(ctx context.Context, repo repository.OrderRepository) (stan.Subscription, error)
 }
 
-func NewNatsStreaming(clusterID string, clientID string, subject string) *natsStreaming {
+func NewNatsStreaming(clusterID string, clientID string, subject string, addr string) *natsStreaming {
 	return &natsStreaming{
 		clusterID: clusterID,
 		clientID:  clientID,
 		subject:   subject,
+		addr:      addr,
 	}
 }
 
 func (ns *natsStreaming) Connect() error {
 	if ns.sc == nil {
-		sc, err := stan.Connect(ns.clusterID, ns.clientID)
+		sc, err := stan.Connect(ns.clusterID, ns.clientID, stan.NatsURL(ns.addr))
 		if err != nil {
+			log.Printf("=====err: %v", err)
 			return err
 		}
 		ns.sc = sc

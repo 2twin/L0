@@ -74,7 +74,7 @@ func (s *serviceProvider) OrderRepository() repository.OrderRepository {
 
 func (s *serviceProvider) NatsStreaming() natsstreaming.NatsStreaming {
 	if s.natsStreaming == nil {
-		ns := natsstreaming.NewNatsStreaming(s.NatsConfig().ClusterID(), s.NatsConfig().ClientID(), s.NatsConfig().Subject())
+		ns := natsstreaming.NewNatsStreaming(s.NatsConfig().ClusterID(), s.NatsConfig().ClientID(), s.NatsConfig().Subject(), s.NatsConfig().Address())
 		s.natsStreaming = ns
 	}
 	return s.natsStreaming

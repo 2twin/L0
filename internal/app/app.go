@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/2twin/L0/internal/config"
 	"github.com/2twin/L0/internal/model"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/cors"
@@ -24,7 +23,6 @@ func NewApp(ctx context.Context) (*App, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	go func() {
 		for {
 			app.serviceProvider.natsStreaming.Publish(model.GenerageOrder())
@@ -43,7 +41,7 @@ func (a *App) Run() error {
 
 func (a *App) initDeps(ctx context.Context) error {
 	deps := []func(context.Context) error{
-		a.initConfig,
+		// a.initConfig,
 		a.initServiceProvider,
 		a.connectNatsStreaming,
 		a.initHttpServer,
@@ -59,14 +57,14 @@ func (a *App) initDeps(ctx context.Context) error {
 	return nil
 }
 
-func (a *App) initConfig(_ context.Context) error {
-	err := config.Load(".env")
-	if err != nil {
-		return err
-	}
+// func (a *App) initConfig(_ context.Context) error {
+// 	err := config.Load(".env")
+// 	if err != nil {
+// 		return err
+// 	}
 
-	return nil
-}
+// 	return nil
+// }
 
 func (a *App) initServiceProvider(_ context.Context) error {
 	a.serviceProvider = newServiceProvider()

@@ -15,7 +15,7 @@ RUN go mod download
 
 COPY . .
 
-RUN go build -o /l0 cmd/main.go
+RUN go build -ldflags="-s -w" -o /wb cmd/main.go
 
 FROM scratch
 
@@ -24,6 +24,6 @@ COPY --from=builder /usr/share/zoneinfo/Europe/Moscow /usr/share/zoneinfo/Europe
 ENV TZ Europe/Moscow
 
 WORKDIR /app
-COPY --from=builder /l0 /app/l0
+COPY --from=builder /wb /app/wb
 
-CMD ["./l0"]
+CMD ["./wb"]
