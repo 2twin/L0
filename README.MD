@@ -13,7 +13,7 @@ http://localhost:8080/order?order_uid=<order_uid>
 
 ![order_uid](https://imgur.com/0JA4JAq.png)
 
-## Результаты тесты с помощью go-wrk
+## Результаты теста с помощью go-wrk
 
 ![go-wrk](https://imgur.com/3IA9DCJ.png)
 
