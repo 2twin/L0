@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get order</title>
+
+    <style>
+        .root {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            padding-top: 50px;
+            font-family: serif;
+        }
+
+        .form input {
+            height: 60px;
+            width: 300px;
+            font-size: 2rem;
+            font-family: serif;
+        }
+
+        .form button {
+            height: 60px;
+            width: 200px;
+            font-size: 2rem;
+        }
+
+        .order {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .order > span {
+            font-size: 2rem;
+        }
+
+        .data h2 {
+            font-size: 2rem;
+        }
+
+        .data th {
+            padding: 10px;
+            border: 1px solid #000;
+        }
+
+        .data td {
+            padding: 10px;
+            background-color: #353535;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="root">
+        <form class="form">
+            <input type="text" name="order_uid" placeholder="Order UID">
+            <button>Найти</button>
+        </form>
+
+        <div class="order">
+            {{ if . }}
+                {{ template "order" . }}
+            {{ else }}
+                <span>Нет данных</span>
+            {{ end }}
+        </div>
+    </div>
+</body>
+
+</html>

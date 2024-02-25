@@ -33,7 +33,7 @@ func GenerageOrder() *Order {
 		CustomFee: 0,
 	}
 
-	item := Item{
+	item1 := Item{
 		ChrtID: 9934930,
 		TrackNumber: trackNumber,
 		Price: 453,
@@ -47,13 +47,27 @@ func GenerageOrder() *Order {
 		Status: 202,
 	}
 
+	item2 := Item{
+		ChrtID: 12313,
+		TrackNumber: trackNumber,
+		Price: 231,
+		Rid: "afaef13rfaesfaftest",
+		Name: "Name",
+		Sale: 10,
+		Size: "02",
+		TotalPrice: 266,
+		NmID: 213123,
+		Brand: "Brand",
+		Status: 201,
+	}
+
 	return &Order{
 		OrderUID: orderUid,
 		TrackNumber: trackNumber,
 		Entry: "WBIL",
 		Delivery: delivery,
 		Payment: payment,
-		Items: []Item{item},
+		Items: []Item{item1, item2},
 		Locale: "en",
 		InternalSignature: "",
 		CustomerID: "test",

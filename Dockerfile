@@ -26,4 +26,6 @@ ENV TZ Europe/Moscow
 WORKDIR /app
 COPY --from=builder /wb /app/wb
 
+ADD /templates /app/templates
+
 CMD ["./wb"]

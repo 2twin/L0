@@ -7,6 +7,6 @@ import (
 )
 
 type OrderService interface {
-	Create(ctx context.Context, order *model.Order) (string ,error)
+	Create(ctx context.Context, order *model.Order) (string, error)
 	Get(ctx context.Context, orderUUID string) (*model.Order, error)
 }

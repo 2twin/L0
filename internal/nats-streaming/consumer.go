@@ -3,7 +3,6 @@ package natsstreaming
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"log"
 
 	"github.com/2twin/L0/internal/model"
@@ -21,7 +20,11 @@ func (ns *natsStreaming) Subscribe(ctx context.Context, repo repository.OrderRep
 			return
 		}
 
-		fmt.Println(order)
+		log.Printf(`
+			-----------------------------------
+			Created order with uid = %v
+			-----------------------------------
+		`, order.OrderUID)
 
 		err = repo.Create(ctx, order.OrderUID, &order)
 		if err != nil {
