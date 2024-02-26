@@ -70,15 +70,21 @@ func (a *App) connectNatsStreaming(_ context.Context) error {
 
 func (a *App) handlerGetOrder(w http.ResponseWriter, r *http.Request) {
 	orderUUID := r.URL.Query().Get("order_uid")
+	
+	var order *model.Order
+	var err error
 
-	order, err := a.serviceProvider.OrderRepository().Get(context.Background(), orderUUID)
+	if orderUUID != "" {
+		order, err = a.serviceProvider.OrderRepository().Get(context.Background(), orderUUID)
+	}
+
 	if err != nil {
 		log.Println(err)
 	}
 
 	log.Printf(`
 		==================================
-		Got Order:
+		Get Order:
 		%v
 		==================================
 	`, order)
