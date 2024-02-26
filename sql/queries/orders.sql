@@ -18,3 +18,6 @@ INSERT INTO orders (
 
 -- name: GetOrder :one
 SELECT * FROM orders WHERE order_uid = $1;
+
+-- name: GetAllOrders :many
+SELECT * FROM orders;

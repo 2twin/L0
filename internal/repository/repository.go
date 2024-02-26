@@ -9,4 +9,5 @@ import (
 type OrderRepository interface {
 	Create(ctx context.Context, orderUUID string, order *model.Order) error
 	Get(ctx context.Context, orderUUID string) (*model.Order, error)
+	GetAll(ctx context.Context) error
 }

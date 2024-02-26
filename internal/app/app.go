@@ -41,6 +41,7 @@ func (a *App) initDeps(ctx context.Context) error {
 	deps := []func(context.Context) error{
 		a.initServiceProvider,
 		a.connectNatsStreaming,
+		a.restoreCache,
 		a.initHttpServer,
 	}
 
@@ -65,6 +66,14 @@ func (a *App) connectNatsStreaming(_ context.Context) error {
 		return err
 	}
 
+	return nil
+}
+
+func (a *App) restoreCache(ctx context.Context) error {
+	err := a.serviceProvider.OrderRepository().GetAll(ctx)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 

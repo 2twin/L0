@@ -14,7 +14,7 @@ import (
 )
 
 type repository struct {
-	cache *ttlcache.Cache[string, model.Order]
+	cache *ttlcache.Cache[string, *model.Order]
 	db    *database.Queries
 }
 
@@ -25,7 +25,7 @@ func NewRepository(dbURL string) (*repository, error) {
 	}
 
 	return &repository{
-		cache: ttlcache.New[string, model.Order](),
+		cache: ttlcache.New[string, *model.Order](),
 		db:    database.New(db),
 	}, nil
 }
@@ -40,7 +40,7 @@ func NewDB(url string) (*sql.DB, error) {
 }
 
 func (r *repository) Create(ctx context.Context, orderUUID string, order *model.Order) error {
-	r.cache.Set(orderUUID, *order, ttlcache.NoTTL)
+	r.cache.Set(orderUUID, order, ttlcache.NoTTL)
 
 	delivery, err := json.Marshal(order.Delivery)
 	if err != nil {
@@ -81,7 +81,7 @@ func (r *repository) Get(ctx context.Context, orderUUID string) (*model.Order, e
 	cacheOrder := r.cache.Get(orderUUID)
 	if cacheOrder != nil {
 		val := cacheOrder.Value()
-		return &val, nil
+		return val, nil
 	}
 
 	dbOrder, err := r.db.GetOrder(ctx, orderUUID)
@@ -96,6 +96,25 @@ func (r *repository) Get(ctx context.Context, orderUUID string) (*model.Order, e
 
 	return order, nil
 }
+
+func (r *repository) GetAll(ctx context.Context) error {
+	dbOrders, err := r.db.GetAllOrders(ctx)
+	if err != nil {
+		return err
+	}
+
+	for _, dbOrder := range dbOrders {
+		order, err := fromDBOrderToOrder(dbOrder)
+		if err != nil {
+			return err
+		}
+
+		r.cache.Set(dbOrder.OrderUid, order, ttlcache.NoTTL)
+	}
+
+	return nil
+}
+
 
 func fromDBOrderToOrder(dbOrder database.Order) (*model.Order, error) {
 	delivery, err := fromDBDeliveryToDelivery(dbOrder.Delivery)
